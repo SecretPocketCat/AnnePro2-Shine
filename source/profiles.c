@@ -175,7 +175,13 @@ const int FADE_VAL = 150;
 
 void reactiveFade(led_t *ledColors) {
   for (int i = 0; i < NUM_ROW * NUM_COLUMN; i++) {
-    if (animatedPressedBuf[i] > FADE_STEP) {
+    if (animatedPressedBuf[i] > FADE_VAL) {
+      animatedPressedBuf[i] -= FADE_STEP;
+      ledColors[i].p.blue = FADE_VAL;
+      ledColors[i].p.red = FADE_VAL;
+      ledColors[i].p.green = FADE_VAL;      
+    }
+    else if (animatedPressedBuf[i] > FADE_STEP) {
       animatedPressedBuf[i] -= FADE_STEP;
       ledColors[i].p.blue = animatedPressedBuf[i];
       ledColors[i].p.red = animatedPressedBuf[i];
@@ -198,11 +204,9 @@ void reactiveFadeKeypress(led_t *ledColors, uint8_t row, uint8_t col) {
 }
 
 void reactiveFadeInit(led_t *ledColors) {
-  // create a quick "falling" animation to make it easier to see
-  // that this profile is activated
   for (int i = 0; i < NUM_ROW; i++) {
     for (int j = 0; j < NUM_COLUMN; j++) {
-      animatedPressedBuf[i * NUM_COLUMN + j] = i * FADE_VAL * 3;
+      animatedPressedBuf[i * NUM_COLUMN + j] = i * FADE_VAL + FADE_VAL * 2;
     }
   }
   setAllKeysToBlank(ledColors);
