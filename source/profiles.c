@@ -169,13 +169,17 @@ void animatedWave(led_t *currentKeyLedColors) {
   }
 }
 
-uint8_t animatedPressedBuf[NUM_ROW * NUM_COLUMN] = {0};
+unsigned short animatedPressedBuf[NUM_ROW * NUM_COLUMN] = {0};
+const int FADE_STEP = 40;
+const int FADE_VAL = 150;
 
 void reactiveFade(led_t *ledColors) {
   for (int i = 0; i < NUM_ROW * NUM_COLUMN; i++) {
-    if (animatedPressedBuf[i] > 5) {
-      animatedPressedBuf[i] -= 5;
-      hsv2rgb(100 - animatedPressedBuf[i], 255, 225, &ledColors[i]);
+    if (animatedPressedBuf[i] > FADE_STEP) {
+      animatedPressedBuf[i] -= FADE_STEP;
+      ledColors[i].p.blue = animatedPressedBuf[i];
+      ledColors[i].p.red = animatedPressedBuf[i];
+      ledColors[i].p.green = animatedPressedBuf[i];
     } else if (animatedPressedBuf[i] > 0) {
       ledColors[i].p.blue = 0;
       ledColors[i].p.red = 0;
@@ -187,10 +191,10 @@ void reactiveFade(led_t *ledColors) {
 
 void reactiveFadeKeypress(led_t *ledColors, uint8_t row, uint8_t col) {
   int i = row * NUM_COLUMN + col;
-  animatedPressedBuf[i] = 100;
-  ledColors[i].p.green = 0;
-  ledColors[i].p.red = 0xFF;
-  ledColors[i].p.blue = 0;
+  animatedPressedBuf[i] = FADE_VAL;
+  ledColors[i].p.green = FADE_VAL;
+  ledColors[i].p.red = FADE_VAL;
+  ledColors[i].p.blue = FADE_VAL;
 }
 
 void reactiveFadeInit(led_t *ledColors) {
@@ -198,7 +202,7 @@ void reactiveFadeInit(led_t *ledColors) {
   // that this profile is activated
   for (int i = 0; i < NUM_ROW; i++) {
     for (int j = 0; j < NUM_COLUMN; j++) {
-      animatedPressedBuf[i * NUM_COLUMN + j] = i * 15 + 25;
+      animatedPressedBuf[i * NUM_COLUMN + j] = i * FADE_VAL * 3;
     }
   }
   setAllKeysToBlank(ledColors);
