@@ -212,6 +212,20 @@ void reactiveFadeInit(led_t *ledColors) {
   setAllKeysToBlank(ledColors);
 }
 
+// // circular reactive fade
+// void reactiveFadeInit(led_t *ledColors) {
+//   for (int i = 0; i < 3; i++) {
+//     for (int j = 0; j < 7; j++) {
+//       int val = i * FADE_VAL + FADE_VAL * 2;
+//       animatedPressedBuf[3 + i * NUM_COLUMN + 7 + j] = val;
+//       animatedPressedBuf[3 - i * NUM_COLUMN + 7 + j] = val;
+//       animatedPressedBuf[3 + i * NUM_COLUMN + 7 - j] = val;
+//       animatedPressedBuf[3 - i * NUM_COLUMN + 7 - j] = val;
+//     }
+//   }
+//   setAllKeysToBlank(ledColors);
+// }
+
 uint8_t pulseBuf[NUM_ROW];
 
 void reactivePulse(led_t *ledColors) {
