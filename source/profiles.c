@@ -6,6 +6,12 @@ unsigned short animatedPressedBuf[NUM_ROW * NUM_COLUMN] = {0};
 const int FADE_STEP = 40;
 const int FADE_VAL = 150;
 
+void setWhiteColor(int index, uint8_t value) {
+  if (animatedPressedBuf[index] < value) {
+    animatedPressedBuf[index] = value;
+  }
+}
+
 void reactiveFade(led_t *ledColors) {
   for (int i = 0; i < NUM_ROW * NUM_COLUMN; i++) {
     if (animatedPressedBuf[i] > FADE_VAL) {
@@ -29,11 +35,17 @@ void reactiveFade(led_t *ledColors) {
 }
 
 void reactiveFadeKeypress(led_t *ledColors, uint8_t row, uint8_t col) {
-  int i = row * NUM_COLUMN + col;
-  animatedPressedBuf[i] = FADE_VAL;
-  ledColors[i].p.green = FADE_VAL;
-  ledColors[i].p.red = FADE_VAL;
-  ledColors[i].p.blue = FADE_VAL;
+  // pressed key
+  setWhiteColor(row * NUM_COLUMN + col, FADE_VAL);
+
+  // neighbour keys
+  uint8_t valNeighbour = FADE_VAL / 3;
+  setWhiteColor(row * NUM_COLUMN + col - 1, valNeighbour);
+  setWhiteColor(row * NUM_COLUMN + col + 1, valNeighbour);
+  setWhiteColor((row - 1) * NUM_COLUMN + col + 1, valNeighbour);
+  setWhiteColor((row - 1) * NUM_COLUMN + col , valNeighbour);
+  setWhiteColor((row + 1) * NUM_COLUMN + col + 1, valNeighbour);
+  setWhiteColor((row + 1) * NUM_COLUMN + col, valNeighbour);
 }
 
 void reactiveFadeInit(led_t *ledColors) {
